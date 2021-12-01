@@ -1,8 +1,6 @@
 package main
 
-import (
-	"Lab1/worker"
-)
+import "Lab1/worker"
 
 func main() {
 	worker.MakeBrutForce("chipher.txt")

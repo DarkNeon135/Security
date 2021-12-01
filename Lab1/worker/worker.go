@@ -2,6 +2,7 @@ package worker
 
 import (
 	"Lab1/internal/decrypt"
+	"encoding/hex"
 	"fmt"
 	"os"
 )
@@ -11,23 +12,11 @@ func MakeBrutForce(fileName string) {
 	if err != nil {
 		fmt.Println(err)
 	}
-	result := decrypt.MakeDecryption(content)
+	hx, err := hex.DecodeString(string(content))
+	if err != nil {
+
+	}
+	result := decrypt.MakeDecryption(hx)
 	fmt.Println(result)
-	//bt := []byte("Matvey_Sosi Penis")
-	//var result string
-	//for i:=0;i<len(bt);i++ {
-	//	result += string(bt[i] ^ 254)
-	//}
-	//test := []byte(result)
-	//
-	//var encrypt []string
-	//for i:=0;i<256;i++{
-	//	var xuy string
-	//	for j:=0;j<len(test);j++{
-	//		xor := test[j] ^ byte(i)
-	//		xuy += string(xor)
-	//	}
-	//	encrypt = append(encrypt,xuy)
-	//}
-	//fmt.Println(encrypt)
+
 }
