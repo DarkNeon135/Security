@@ -1,28 +1,57 @@
 package decrypt
 
+import (
+	"fmt"
+	"strconv"
+	"unicode/utf8"
+)
+
 type Decode struct {
 	Str   string
 	Score int
+	Key   string
 }
 
-func MakeDecryption(str []byte) []Decode {
-
-	decode := make([]Decode, 256)
-
-	for i := 0; i < 256; i++ {
-
-		var xor byte
-		for j := 0; j < len(str); j++ {
-			xor = str[j] ^ byte(i)
-			decode[i].Str += string(xor)
-		}
-
-		decode[i].Score += getCharWeight(xor)
-
+func BinaryToString(str string) (int64, error) {
+	output, err := strconv.ParseInt(str, 2, 64)
+	if err != nil {
+		fmt.Println(err)
+		return 0, err
 	}
+	return output, nil
+}
+func XorDecrypt(str []byte, key string) Decode {
+	decode := Decode{}
+
+	for i := 0; i < len(str); i++ {
+		xor := str[i] ^ key[i%len(key)]
+		decode.Score += getCharWeight(xor)
+		if xor > 127 {
+			test, _ := utf8.DecodeLastRuneInString(string(xor))
+			decode.Str += fmt.Sprintf("%q", test)
+		} else {
+			decode.Str += string(xor)
+		}
+	}
+	decode.Key = key
 
 	return decode
 }
+func findHighestScore(decodeArr []Decode) Decode {
+	var maxValue int
+	var maxValueId int
+
+	for id, _ := range decodeArr {
+		if decodeArr[id].Score > maxValue {
+			maxValue = decodeArr[id].Score
+			maxValueId = id
+		}
+
+	}
+
+	return decodeArr[maxValueId]
+}
+
 func getCharWeight(char byte) int {
 	wm := map[byte]int{
 		byte('U'): 2,
@@ -51,5 +80,6 @@ func getCharWeight(char byte) int {
 		byte('E'): 14,
 		byte('e'): 14,
 	}
+
 	return wm[char]
 }
