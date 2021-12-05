@@ -7,6 +7,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"log"
+	"strings"
 )
 
 func DecryptThatFileSuka(fileName string) ([]decrypt.Decode, error) {
@@ -38,8 +39,8 @@ func doSecondTask(content []string) (decrypt.Decode, error) {
 	//if err != nil {
 	//	return decrypt.Decode{},errors.New("[worker] -> Error in singleByte xor "+ err.Error())
 	//}
-
-	return decrypt.MakeBrutForce(hx, 1), nil
+	possibleChars := decrypt.ABC + strings.ToLower(decrypt.ABC) + decrypt.Numbers
+	return decrypt.MakeBrutForce(hx, 1, possibleChars), nil
 }
 
 func doThirdTask(content []string) (decrypt.Decode, error) {
@@ -51,6 +52,8 @@ func doThirdTask(content []string) (decrypt.Decode, error) {
 	for i := 0; i < 15; i++ {
 		wtd = append(wtd, decodedBase[i])
 	}
-	decryptedPart := decrypt.MakeBrutForce(wtd, 3)
+	possibleChars := decrypt.ABC + strings.ToLower(decrypt.ABC) + decrypt.Numbers
+
+	decryptedPart := decrypt.MakeBrutForce(wtd, 3, possibleChars)
 	return decrypt.XorDecrypt(decodedBase, decryptedPart.Key), nil
 }

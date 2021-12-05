@@ -2,11 +2,10 @@ package decrypt
 
 import "math"
 
-func MakeBrutForce(encryptedStr []byte, keyLength int) Decode {
+func MakeBrutForce(encryptedStr []byte, keyLength int, possibleChars string) Decode {
 
-	possibleCharValues := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 	keyIndexes := []int{0}
-	newDigitLoop := len(possibleCharValues)
+	newDigitLoop := len(possibleChars)
 	iterationCount := 0
 	var decodedArray []Decode
 
@@ -14,10 +13,10 @@ func MakeBrutForce(encryptedStr []byte, keyLength int) Decode {
 		iterationCount++
 		possibleKey := ""
 		for _, charIdx := range keyIndexes {
-			possibleKey += string(possibleCharValues[charIdx])
+			possibleKey += string(possibleChars[charIdx])
 		}
 
-		decodedStruct := XorDecrypt(encryptedStr, possibleKey)
+		decodedStruct := XorDecrypt(encryptedStr, []byte(possibleKey))
 		decodedArray = append(decodedArray, decodedStruct)
 		//
 		// checking for key suitability... blaaaa decoder... blaaaa xor... blaaaa...
@@ -28,13 +27,13 @@ func MakeBrutForce(encryptedStr []byte, keyLength int) Decode {
 				keyIndexes[j] = 0
 			}
 			keyIndexes = append([]int{0}, keyIndexes...)
-			newDigitLoop = int(math.Pow(float64(len(possibleCharValues)), float64(len(keyIndexes))))
+			newDigitLoop = int(math.Pow(float64(len(possibleChars)), float64(len(keyIndexes))))
 			iterationCount = 0
 			continue
 		}
 
 		for i := 0; i < len(keyIndexes); i++ {
-			keyIndexes[i] = iterationCount / int(math.Pow(float64(len(possibleCharValues)), float64(len(keyIndexes)-1-i))) % len(possibleCharValues)
+			keyIndexes[i] = iterationCount / int(math.Pow(float64(len(possibleChars)), float64(len(keyIndexes)-1-i))) % len(possibleChars)
 		}
 	}
 	result := findHighestScore(decodedArray)

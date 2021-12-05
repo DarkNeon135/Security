@@ -6,10 +6,15 @@ import (
 	"unicode/utf8"
 )
 
+const (
+	Numbers = "0123456789"
+	ABC     = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+)
+
 type Decode struct {
 	Str   string
 	Score int
-	Key   string
+	Key   []byte
 }
 
 func BinaryToString(str string) (int64, error) {
@@ -20,7 +25,7 @@ func BinaryToString(str string) (int64, error) {
 	}
 	return output, nil
 }
-func XorDecrypt(str []byte, key string) Decode {
+func XorDecrypt(str []byte, key []byte) Decode {
 	decode := Decode{}
 
 	for i := 0; i < len(str); i++ {
@@ -82,4 +87,7 @@ func getCharWeight(char byte) int {
 	}
 
 	return wm[char]
+}
+func SimpleSubDecoder() {
+
 }
