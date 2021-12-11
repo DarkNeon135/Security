@@ -18,9 +18,6 @@ func MakeBrutForce(encryptedStr []byte, keyLength int, possibleChars string) Dec
 
 		decodedStruct := XorDecrypt(encryptedStr, []byte(possibleKey))
 		decodedArray = append(decodedArray, decodedStruct)
-		//
-		// checking for key suitability... blaaaa decoder... blaaaa xor... blaaaa...
-		//
 
 		if iterationCount == newDigitLoop {
 			for j := 0; j < len(keyIndexes); j++ {
