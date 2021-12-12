@@ -3,7 +3,6 @@ package decrypt
 import (
 	"fmt"
 	"strconv"
-	"unicode/utf8"
 )
 
 const (
@@ -30,13 +29,10 @@ func XorDecrypt(str []byte, key []byte) Decode {
 
 	for i := 0; i < len(str); i++ {
 		xor := str[i] ^ key[i%len(key)]
+
 		decode.Score += getCharWeight(xor)
-		if xor > 127 {
-			test, _ := utf8.DecodeLastRuneInString(string(xor))
-			decode.Str += fmt.Sprintf("%q", test)
-		} else {
-			decode.Str += string(xor)
-		}
+
+		decode.Str += string(xor)
 	}
 	decode.Key = key
 

@@ -3,6 +3,7 @@ package worker
 import (
 	"Lab1/internal/decrypt"
 	"Lab1/internal/file_processing"
+	"Lab1/internal/genetic"
 	"encoding/base64"
 	"encoding/hex"
 	"errors"
@@ -31,6 +32,10 @@ func DecryptThatFileSuka(fileName string) ([]decrypt.Decode, error) {
 
 	decodedResult = append(decodedResult, decryptedStruct)
 
+	decryptedStruct = doFourthTask(content)
+
+	decodedResult = append(decodedResult, decryptedStruct)
+
 	return decodedResult, nil
 }
 
@@ -56,4 +61,15 @@ func doThirdTask(content []string) (decrypt.Decode, error) {
 
 	decryptedPart := decrypt.MakeBrutForce(wtd, 3, possibleChars)
 	return decrypt.XorDecrypt(decodedBase, decryptedPart.Key), nil
+}
+
+func doFourthTask(content []string) decrypt.Decode {
+	genAlg := genetic.New(500, 150, "internal/trigrams.txt")
+	plaintext, key := genAlg.Decrypt([]byte(content[2]))
+
+	return decrypt.Decode{
+		Str:   string(plaintext),
+		Score: 0,
+		Key:   []byte(key),
+	}
 }
